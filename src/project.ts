@@ -1,6 +1,6 @@
 import TodoItem from "./todoItem"
 
-class Project {
+export default class Project {
   title: string;
   description: string;
   todoItemList: TodoItem[];
@@ -9,6 +9,16 @@ class Project {
     this.title = title;
     this.description = description;
   }
-}
 
-export default Project;
+  addTodoItem(item: TodoItem) {
+    this.todoItemList.push(item);
+  }
+
+  getDescription(): string {
+    return this.description;
+  }
+
+  getTitle(): string {
+    return this.title;
+  }
+}
