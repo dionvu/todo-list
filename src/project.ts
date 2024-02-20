@@ -5,6 +5,9 @@ export default class Project {
   description: string;
   todoItemList: TodoItem[];
 
+  // Container, title, description, remove button
+  domElements: HTMLElement[];
+
   constructor(title: string, description: string) {
     this.title = title;
     this.description = description;
@@ -20,5 +23,14 @@ export default class Project {
 
   getTitle(): string {
     return this.title;
+  }
+
+  setProjectElements(elements: HTMLElement[]): void {
+    this.domElements = elements;
+  }
+
+  setTitle(title: string): void {
+    this.title = title;
+    this.domElements[1].textContent = title;
   }
 }

@@ -1,16 +1,25 @@
 import '../style/style.css';
 import Project from './project';
-// import TodoItem from './todoItem';
-// import { Priority } from './todoItem';
 import displayProject from './DOM';
 
 let projectList: Project[] = [];
 
 projectList.push(new Project("Title", "Describing words"));
+projectList.push(new Project("zz", "Describing wordz"));
 
-displayProject(document.getElementById('projects-container'), projectList[0]);
+// Test
+projectList[0].setProjectElements(
+  displayProject(document.getElementById('projects-container'), projectList[0])
+);
 
-log();
+// projectList[1].setProjectElements(
+//   displayProject(document.getElementById('projects-container'), projectList[1])
+// );
+//
+// projectList[0].setTitle('New title!');
+// end 
+
+logProjects(projectList);
 
 export default function deleteProject(targetProject: Project) {
   const index = projectList.findIndex((project: Project) => {
@@ -18,10 +27,10 @@ export default function deleteProject(targetProject: Project) {
   });
   projectList.splice(index, index + 1);
 
-  log();
+  logProjects(projectList);
 };
 
-function log() {
-  projectList.forEach((element) => { console.log(element.title) });
-  console.log("done");
+function logProjects(projectList: Project[]): void {
+  console.table(projectList);
+  console.log('table');
 }

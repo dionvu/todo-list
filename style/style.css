@@ -10,7 +10,7 @@ body {
 #projects-container {
   display: flex;
   flex-direction: column;
-  background: orange;
+  background: black;
   height: 1000px;
   width: 500px;
 }

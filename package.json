@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "build": "webpack",
+    "build": "tsc && webpack",
     "dev": "webpack serve"
   },
   "keywords": [],
