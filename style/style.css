@@ -3,6 +3,8 @@
 }
 
 body {
+  display: flex;
+
   margin: 0;
   padding: 0;
 }
@@ -32,8 +34,6 @@ body {
 }
 
 /* Create project form */
-
-dialog {}
 
 #project-form {
   display: block;

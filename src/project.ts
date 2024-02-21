@@ -1,10 +1,11 @@
 import { projectList } from ".";
-// import TodoItem from "./todoItem"
+import todoItem, { Priority } from "./todoItem";
+import TodoItem from "./todoItem"
 
 export default class Project {
   title: string;
   description: string;
-  // todoItemList: TodoItem[];
+  todoItemList: TodoItem[];
 
   // Container, title, description, remove button
   domElements: HTMLElement[];
@@ -12,6 +13,7 @@ export default class Project {
   constructor(title: string, description: string) {
     this.title = title;
     this.description = description;
+    this.todoItemList = [];
   }
 
   // addTodoItem(item: TodoItem) { this.todoItemList.push(item); };
@@ -53,6 +55,10 @@ export default class Project {
  * @return Array containing the created dom elements.
  */
 export function displayProject(container: HTMLElement, project: Project): HTMLElement[] {
+  addTodoItem(project); // TEMP
+  addTodoItem(project); // TEMP
+  addTodoItem(project); // TEMP
+
   const newProject = document.createElement('div');
   newProject.classList.add('project');
 
@@ -64,12 +70,15 @@ export function displayProject(container: HTMLElement, project: Project): HTMLEl
 
   const removeButton = createRemovebutton(newProject, project);
 
+  const showTodoButton = createTodoShowButton(project);
+
   newProject.appendChild(projectTitle);
   newProject.appendChild(projectDescription);
+  newProject.appendChild(showTodoButton);
   newProject.appendChild(removeButton);
   container.appendChild(newProject);
 
-  return [newProject, projectTitle, projectDescription, removeButton];
+  return [newProject, projectTitle, projectDescription, showTodoButton, removeButton];
 }
 
 /**
@@ -100,4 +109,49 @@ function createRemovebutton(newProject: HTMLElement, project: Project): HTMLElem
     removeProject(newProject, project);
   });
   return removeButton;
+}
+
+// Todo stuff
+// 
+
+function createTodoShowButton(project: Project) {
+  const todoShowButton = document.createElement('button');
+  todoShowButton.textContent = 'Show todo list';
+
+  todoShowButton.addEventListener('click', () => {
+    displayTodoItemsList(project);
+  });
+  return todoShowButton;
+}
+
+function displayTodoItemsList(project: Project): void {
+  const todoListContainer = document.getElementById('todo-container');
+  todoListContainer.innerHTML = '';
+
+  project.todoItemList.forEach((item: todoItem) => {
+
+    const itemContainer = document.createElement('div');
+
+    const name = document.createElement('h2');
+    name.textContent = item.title;
+
+    const date = document.createElement('h3');
+    date.textContent = `Due date: ${item.dueDate}`;
+
+    const description = document.createElement('p');
+    description.textContent = item.description;
+
+    const priority = document.createElement('h3');
+    if (item.priority === Priority.high) priority.textContent = `Priority: ${Priority.high}`;
+
+    itemContainer.appendChild(name);
+    itemContainer.appendChild(date);
+    itemContainer.appendChild(priority);
+    itemContainer.appendChild(description);
+    todoListContainer.appendChild(itemContainer);
+  });
+}
+
+function addTodoItem(project: Project): void {
+  project.todoItemList.push(new TodoItem('Name', 'description', '1.2.2.', Priority.high));
 }

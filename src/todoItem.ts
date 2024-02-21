@@ -1,7 +1,7 @@
 export enum Priority {
-  high,
-  medium,
-  low,
+  high = 'high',
+  medium = 'medium',
+  low = 'low',
 }
 
 export default class todoItem {
