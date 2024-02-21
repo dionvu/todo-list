@@ -1,29 +1,27 @@
 import '../style/style.css';
 import Project from './project';
-import displayProject from './DOM';
+import createProjectButton from './projectForm';
+import { displayProject } from './project';
 
-let projectList: Project[] = [];
+const projectsContainer = document.getElementById('projects-container')
+
+export let projectList: Project[] = [];
 
 projectList.push(new Project("Title", "Describing words"));
-projectList.push(new Project("zz", "Describing wordz"));
 
-// Test
 projectList[0].setProjectElements(
-  displayProject(document.getElementById('projects-container'), projectList[0])
+  displayProject(projectsContainer, projectList[0])
 );
 
-// projectList[1].setProjectElements(
-//   displayProject(document.getElementById('projects-container'), projectList[1])
-// );
-//
-// projectList[0].setTitle('New title!');
-// end 
+projectList[0].addEditListeners();
 
 logProjects(projectList);
 
 export default function deleteProject(targetProject: Project) {
   const index = projectList.findIndex((project: Project) => {
-    if (project.title === targetProject.title) return true;
+    if (project.title === targetProject.title
+      && project.description === targetProject.description)
+      return true;
   });
   projectList.splice(index, index + 1);
 
@@ -34,3 +32,5 @@ function logProjects(projectList: Project[]): void {
   console.table(projectList);
   console.log('table');
 }
+
+createProjectButton();
