@@ -22,7 +22,7 @@ form.addEventListener('submit', (e) => {
   projectList[projectList.length - 1].setProjectElements(
     displayProject(projectsContainer, projectList[projectList.length - 1])
   );
-  projectList[projectList.length - 1].addEditListeners();
+  projectList[projectList.length - 1].addListeners();
   dialog.close();
   form.reset();
 });

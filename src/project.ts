@@ -1,6 +1,7 @@
 import { projectList } from ".";
-import todoItem, { Priority } from "./todoItem";
 import TodoItem from "./todoItem"
+import todoItem, { Priority } from "./todoItem";
+import { createAddTodoButton } from "./todoItem";
 
 export default class Project {
   title: string;
@@ -9,6 +10,10 @@ export default class Project {
 
   // Container, title, description, add todo, show todo, remove button
   domElements: HTMLElement[];
+  todoDialog: HTMLDialogElement;
+  todoForm: HTMLFormElement;
+  todoTitleInput: HTMLInputElement;
+  todoDescriptionInput: HTMLInputElement;
 
   constructor(title: string, description: string) {
     this.title = title;
@@ -21,19 +26,17 @@ export default class Project {
     this.description = description;
     this.domElements[2].textContent = description;
   };
-
   getTitle(): string { return this.title; };
   setTitle(title: string): void {
     this.title = title;
     this.domElements[1].textContent = title;
   };
-
   setProjectElements(elements: HTMLElement[]): void { this.domElements = elements; };
 
   /**
    * @brief Allows user to edit the project title & description by clicking on them.
    */
-  addEditListeners(): void {
+  addListeners(): void {
     this.domElements[1].addEventListener('click', () => {
       this.setTitle(prompt("Enter new name."));
     });
@@ -42,23 +45,24 @@ export default class Project {
       this.setDescription(prompt("Enter new description."));
     });
 
-    const dialogTodo = document.getElementById('todo-dialog') as HTMLDialogElement;
-
     this.domElements[3].addEventListener('click', () => {
-      dialogTodo.showModal();
+      this.todoDialog.showModal();
     });
 
-    const formTodo = document.getElementById('todo-form') as HTMLFormElement;
+    [this.todoDialog, this.todoForm, this.todoTitleInput, this.todoDescriptionInput] = createTodoDialog();
+    document.body.appendChild(this.todoDialog);
 
-    formTodo.addEventListener('submit', (e) => {
+    this.todoDialog.addEventListener('submit', (e) => {
       e.preventDefault();
-      const title: string = (document.getElementById('todo-title') as HTMLInputElement).value;
-      const description: string = (document.getElementById('todo-description') as HTMLInputElement).value;
-      addTodoItem(this.todoItemList, title, description);
-      dialogTodo.close();
-      formTodo.reset();
-      displayTodoItemsList(this);
+      this.addTodoItem(this.todoTitleInput.value, this.todoDescriptionInput.value);
+      this.todoDialog.close();
+      this.todoForm.reset();
+      console.log(this.todoItemList);
     });
+  }
+
+  addTodoItem(title: string, description: string): void {
+    this.todoItemList.push(new TodoItem(title, description, "1.2.2", Priority.high));
   }
 }
 
@@ -137,7 +141,7 @@ function displayTodoItemsList(project: Project): void {
   const todoListContainer = document.getElementById('todo-container');
   todoListContainer.innerHTML = '';
 
-  project.todoItemList.forEach((item: todoItem) => {
+  project.todoItemList.forEach((item: TodoItem) => {
 
     const itemContainer = document.createElement('div');
 
@@ -153,18 +157,18 @@ function displayTodoItemsList(project: Project): void {
     const priority = document.createElement('h3');
     if (item.priority === Priority.high) priority.textContent = `Priority: ${Priority.high}`;
 
-    projectName.addEventListener('click', () => {
-      const newName: string = prompt('Enter new name');
-      projectName.textContent = newName;
-      item.title = newName;
-    });
+    // projectName.addEventListener('click', () => {
+    //   const newName: string = prompt('Enter new name');
+    //   projectName.textContent = newName;
+    //   item.title = newName;
+    // });
 
     // projectDescription.addEventListener('click', () => {
     //   const newDescription: string = prompt('Enter new name');
     //   projectDescription.textContent = newDescription;
     //   item.title = newDescription;
     // });
-    //
+
     // date.addEventListener('click', () => {
     //   const newDate: string = prompt('Enter new name');
     //   date.textContent = newDate;
@@ -178,7 +182,6 @@ function displayTodoItemsList(project: Project): void {
     //     item.priority = Priority.high;
     //   else
     //     item.priority = Priority.medium;
-    //   displayTodoItemsList(project);
     // });
 
     itemContainer.appendChild(projectName);
@@ -189,12 +192,51 @@ function displayTodoItemsList(project: Project): void {
   });
 }
 
-export function createAddTodoButton(): HTMLElement {
-  const addTodoButton = document.createElement('button');
-  addTodoButton.textContent = 'Add';
-  return addTodoButton;
-}
+function createTodoDialog(): [HTMLDialogElement, HTMLFormElement, HTMLInputElement, HTMLInputElement] {
+  // Create dialog element
+  const todoDialog = document.createElement('dialog');
+  todoDialog.id = 'todo-dialog';
 
-function addTodoItem(todoItemList: todoItem[], title: string, description: string): void {
-  todoItemList.push(new todoItem(title, description, "1/2/2", Priority.high));
+  // Create form element
+  const todoForm = document.createElement('form');
+  todoForm.id = 'todo-form';
+
+  // Create title input
+  const titleLabel = document.createElement('label');
+  titleLabel.htmlFor = 'todo-title';
+  titleLabel.textContent = 'Title';
+  const titleInput = document.createElement('input');
+  titleInput.id = 'todo-title';
+  titleInput.type = 'text';
+  titleInput.name = 'title';
+  titleInput.placeholder = 'Title';
+  titleInput.required = true;
+
+  // Create description input
+  const descriptionLabel = document.createElement('label');
+  descriptionLabel.htmlFor = 'todo-description';
+  descriptionLabel.textContent = 'Description';
+  const descriptionInput = document.createElement('input');
+  descriptionInput.id = 'todo-description';
+  descriptionInput.type = 'text';
+  descriptionInput.name = 'description';
+  descriptionInput.placeholder = 'Description';
+  descriptionInput.required = true;
+
+  // Create submit button
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.textContent = 'Submit';
+
+  // Append elements to form
+  todoForm.appendChild(titleLabel);
+  todoForm.appendChild(titleInput);
+  todoForm.appendChild(descriptionLabel);
+  todoForm.appendChild(descriptionInput);
+  todoForm.appendChild(submitButton);
+
+  // Append form to dialog
+  todoDialog.appendChild(todoForm);
+
+  return [todoDialog, todoForm, titleInput, descriptionInput];
 }
