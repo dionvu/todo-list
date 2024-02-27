@@ -7,7 +7,7 @@ export default class Project {
   description: string;
   todoItemList: TodoItem[];
 
-  // Container, title, description, remove button
+  // Container, title, description, add todo, show todo, remove button
   domElements: HTMLElement[];
 
   constructor(title: string, description: string) {
@@ -15,8 +15,6 @@ export default class Project {
     this.description = description;
     this.todoItemList = [];
   }
-
-  // addTodoItem(item: TodoItem) { this.todoItemList.push(item); };
 
   getDescription(): string { return this.description; };
   setDescription(description: string): void {
@@ -43,22 +41,34 @@ export default class Project {
     this.domElements[2].addEventListener('click', () => {
       this.setDescription(prompt("Enter new description."));
     });
+
+    const dialogTodo = document.getElementById('todo-dialog') as HTMLDialogElement;
+
+    this.domElements[3].addEventListener('click', () => {
+      dialogTodo.showModal();
+    });
+
+    const formTodo = document.getElementById('todo-form') as HTMLFormElement;
+
+    formTodo.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title: string = (document.getElementById('todo-title') as HTMLInputElement).value;
+      const description: string = (document.getElementById('todo-description') as HTMLInputElement).value;
+      addTodoItem(this.todoItemList, title, description);
+      dialogTodo.close();
+      formTodo.reset();
+      displayTodoItemsList(this);
+    });
   }
 }
 
 /**
  * @brief Displays the project in the dom.
- *
  * @param container The project container. 
  * @param project The project object to be displayed
- * 
  * @return Array containing the created dom elements.
  */
 export function displayProject(container: HTMLElement, project: Project): HTMLElement[] {
-  addTodoItem(project); // TEMP
-  addTodoItem(project); // TEMP
-  addTodoItem(project); // TEMP
-
   const newProject = document.createElement('div');
   newProject.classList.add('project');
 
@@ -70,15 +80,18 @@ export function displayProject(container: HTMLElement, project: Project): HTMLEl
 
   const removeButton = createRemovebutton(newProject, project);
 
+  const addTodoButton = createAddTodoButton();
+
   const showTodoButton = createTodoShowButton(project);
 
   newProject.appendChild(projectTitle);
   newProject.appendChild(projectDescription);
+  newProject.appendChild(addTodoButton);
   newProject.appendChild(showTodoButton);
   newProject.appendChild(removeButton);
   container.appendChild(newProject);
 
-  return [newProject, projectTitle, projectDescription, showTodoButton, removeButton];
+  return [newProject, projectTitle, projectDescription, addTodoButton, showTodoButton, removeButton];
 }
 
 /**
@@ -88,8 +101,7 @@ export function displayProject(container: HTMLElement, project: Project): HTMLEl
  */
 function removeProject(projectDom: HTMLElement, targetProject: Project): void {
   const index = projectList.findIndex((project: Project) => {
-    if (project.title === targetProject.title
-      && project.description === targetProject.description)
+    if (projectList.indexOf(project) === projectList.indexOf(targetProject))
       return true;
   });
   projectList.splice(index, index + 1);
@@ -111,9 +123,6 @@ function createRemovebutton(newProject: HTMLElement, project: Project): HTMLElem
   return removeButton;
 }
 
-// Todo stuff
-// 
-
 function createTodoShowButton(project: Project) {
   const todoShowButton = document.createElement('button');
   todoShowButton.textContent = 'Show todo list';
@@ -132,26 +141,60 @@ function displayTodoItemsList(project: Project): void {
 
     const itemContainer = document.createElement('div');
 
-    const name = document.createElement('h2');
-    name.textContent = item.title;
+    const projectName = document.createElement('h2');
+    projectName.textContent = item.title;
 
     const date = document.createElement('h3');
     date.textContent = `Due date: ${item.dueDate}`;
 
-    const description = document.createElement('p');
-    description.textContent = item.description;
+    const projectDescription = document.createElement('p');
+    projectDescription.textContent = item.description;
 
     const priority = document.createElement('h3');
     if (item.priority === Priority.high) priority.textContent = `Priority: ${Priority.high}`;
 
-    itemContainer.appendChild(name);
+    projectName.addEventListener('click', () => {
+      const newName: string = prompt('Enter new name');
+      projectName.textContent = newName;
+      item.title = newName;
+    });
+
+    // projectDescription.addEventListener('click', () => {
+    //   const newDescription: string = prompt('Enter new name');
+    //   projectDescription.textContent = newDescription;
+    //   item.title = newDescription;
+    // });
+    //
+    // date.addEventListener('click', () => {
+    //   const newDate: string = prompt('Enter new name');
+    //   date.textContent = newDate;
+    //   item.title = newDate;
+    // });
+
+    // priority.addEventListener('click', () => {
+    //   if (item.priority === Priority.high)
+    //     item.priority = Priority.low;
+    //   else if (item.priority === Priority.medium)
+    //     item.priority = Priority.high;
+    //   else
+    //     item.priority = Priority.medium;
+    //   displayTodoItemsList(project);
+    // });
+
+    itemContainer.appendChild(projectName);
     itemContainer.appendChild(date);
     itemContainer.appendChild(priority);
-    itemContainer.appendChild(description);
+    itemContainer.appendChild(projectDescription);
     todoListContainer.appendChild(itemContainer);
   });
 }
 
-function addTodoItem(project: Project): void {
-  project.todoItemList.push(new TodoItem('Name', 'description', '1.2.2.', Priority.high));
+export function createAddTodoButton(): HTMLElement {
+  const addTodoButton = document.createElement('button');
+  addTodoButton.textContent = 'Add';
+  return addTodoButton;
+}
+
+function addTodoItem(todoItemList: todoItem[], title: string, description: string): void {
+  todoItemList.push(new todoItem(title, description, "1/2/2", Priority.high));
 }

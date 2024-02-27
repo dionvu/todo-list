@@ -11,12 +11,21 @@
   <div id="projects-container">
   </div>
   <button id="add-project">Add a new project!</button>
-  <dialog>
+  <dialog id="project-dialog">
     <form id="project-form">
-      <label for="title"></label>
-      <input id="title-input" type="name" name="title" value="" placeholder="title" required>
-      <label for=" description"></label>
-      <input id="description-input" type="name" name="description" value="" placeholder="description" required>
+      <label for="project-title"></label>
+      <input id="project-title" type="name" name="title" placeholder="title" required>
+      <label for="project-description"></label>
+      <input id="project-description" type="name" name="description" value="" placeholder="description" required>
+      <button type="submit">Sumbit</button>
+    </form>
+  </dialog>
+  <dialog id="todo-dialog">
+    <form id="todo-form">
+      <label for="todo-title"></label>
+      <input id="todo-title" type="name" name="title" placeholder="title" required>
+      <label for="todo-description"></label>
+      <input id="todo-description" type="name" name="description" value="" placeholder="description" required>
       <button type="submit">Sumbit</button>
     </form>
   </dialog>
