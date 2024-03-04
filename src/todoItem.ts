@@ -14,7 +14,7 @@ export default class todoItem {
     title: HTMLElement;
     description: HTMLElement;
     priority: HTMLElement;
-    removeButton: HTMLElement;
+    removeButton: HTMLButtonElement;
   };
 
   constructor(title: string, description: string, priority: Priority) {
@@ -23,36 +23,75 @@ export default class todoItem {
     this.priority = priority;
   }
 
-  // title, description, prior, remove
-  setDomElements(elements: HTMLElement[]): void {
+  setDomElements(obj: { title: HTMLElement, description: HTMLElement, priority: HTMLElement, removeButton: HTMLButtonElement }): void {
     this.dom = {
-      title: elements[0],
-      description: elements[1],
-      priority: elements[2],
-      removeButton: elements[3],
+      title: obj.title,
+      description: obj.description,
+      priority: obj.priority,
+      removeButton: obj.removeButton,
+    };
+
+    this.setPriority(Priority.low);
+
+    this.dom.priority.addEventListener('click', this.cyclePriority.bind(this));
+    console.table(this);
+  }
+
+  cyclePriority() {
+    console.table(this);
+    if (this.priority === Priority.high) {
+      this.setPriority(Priority.low);
+    }
+
+    else if (this.priority === Priority.medium) {
+      this.setPriority(Priority.high);
+    }
+    else {
+      this.setPriority(Priority.medium);
+    }
+  }
+
+  setPriority(priority: Priority) {
+    if (priority === Priority.high) {
+      this.priority = Priority.high;
+      this.dom.priority.textContent = `Priority: ${Priority.high}`;
+      this.dom.priority.style.color = 'red';
+    }
+
+    else if (priority === Priority.medium) {
+      this.priority = Priority.medium;
+      this.dom.priority.textContent = `Priority: ${Priority.medium}`;
+      this.dom.priority.style.color = 'orange';
+    }
+    else {
+      this.priority = Priority.low;
+      this.dom.priority.textContent = `Priority: ${Priority.low}`;
+      this.dom.priority.style.color = 'green';
     }
   }
 }
 
+
+
 export function addTodoItem(todoItemList: todoItem[], title: string, description: string): void {
-  todoItemList.push(new todoItem(title, description, Priority.high));
+  todoItemList.push(new todoItem(title, description, Priority.low));
 }
 
 export function createTodoDialog(): {
   dialog: HTMLDialogElement, todoForm: HTMLFormElement,
   titleInput: HTMLInputElement, descriptionInput: HTMLInputElement,
-  submit: HTMLElement
+  submit: HTMLButtonElement
 } {
-  const todoDialog = document.createElement('dialog');
+  const todoDialog = document.createElement('dialog') as HTMLDialogElement;
   todoDialog.id = 'todo-dialog';
 
-  const todoForm = document.createElement('form');
+  const todoForm = document.createElement('form') as HTMLFormElement;
   todoForm.id = 'todo-todoForm';
 
   const titleLabel = document.createElement('label');
   titleLabel.htmlFor = 'todo-title';
   titleLabel.textContent = 'Title';
-  const titleInput = document.createElement('input');
+  const titleInput = document.createElement('input') as HTMLInputElement;
   titleInput.id = 'todo-title';
   titleInput.type = 'text';
   titleInput.name = 'title';
@@ -62,7 +101,7 @@ export function createTodoDialog(): {
   const descriptionLabel = document.createElement('label');
   descriptionLabel.htmlFor = 'todo-description';
   descriptionLabel.textContent = 'Description';
-  const descriptionInput = document.createElement('input');
+  const descriptionInput = document.createElement('input') as HTMLInputElement;
   descriptionInput.id = 'todo-description';
   descriptionInput.type = 'text';
   descriptionInput.name = 'description';
@@ -70,7 +109,7 @@ export function createTodoDialog(): {
   descriptionInput.required = true;
 
 
-  const submitButton = document.createElement('button');
+  const submitButton = document.createElement('button') as HTMLButtonElement;
   submitButton.type = 'submit';
   submitButton.textContent = 'Submit';
 
@@ -83,11 +122,11 @@ export function createTodoDialog(): {
   todoDialog.appendChild(todoForm);
 
   let obj = {
-    dialog: todoDialog as HTMLDialogElement,
-    todoForm: todoForm as HTMLFormElement,
-    titleInput: titleInput as HTMLInputElement,
-    descriptionInput: descriptionInput as HTMLInputElement,
-    submit: submitButton as HTMLElement,
+    dialog: todoDialog,
+    todoForm: todoForm,
+    titleInput: titleInput,
+    descriptionInput: descriptionInput,
+    submit: submitButton,
   };
   return obj;
 }
@@ -106,10 +145,12 @@ export function displayTodoItemsList(project: Project): void {
     const description = document.createElement('p');
     description.textContent = item.description;
 
-    const removeButton = createRemoveButton(itemContainer, item, project);
+    const removeButton = createRemoveButton(itemContainer, item, project) as HTMLButtonElement;
 
     const priority = document.createElement('h3');
-    if (item.priority === Priority.high) priority.textContent = `Priority: ${Priority.high}`;
+    if (item.priority === Priority.low) priority.textContent = `Priority: ${Priority.low}`;
+    else if (item.priority === Priority.medium) priority.textContent = `Priority: ${Priority.medium}`;
+    else priority.textContent = `Priority: ${Priority.high}`;
 
     itemContainer.appendChild(title);
     itemContainer.appendChild(description);
@@ -117,12 +158,12 @@ export function displayTodoItemsList(project: Project): void {
     itemContainer.appendChild(removeButton);
     todoListContainer.appendChild(itemContainer);
 
-    item.setDomElements([title, description, removeButton, priority])
+    item.setDomElements({ title, description, priority, removeButton });
   });
 }
 
-function createRemoveButton(container: HTMLElement, item: todoItem, project: Project): HTMLElement {
-  const button = document.createElement('button');
+function createRemoveButton(container: HTMLElement, item: todoItem, project: Project): HTMLButtonElement {
+  const button = document.createElement('button') as HTMLButtonElement;
   button.addEventListener('click', () => {
     container.remove();
     removeTodoItem(project, item);

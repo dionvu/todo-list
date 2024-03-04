@@ -1,7 +1,7 @@
 import { projectList } from ".";
-import TodoItem from "./todoItem"
 import { Priority } from "./todoItem";
 import { displayTodoItemsList } from "./todoItem";
+import TodoItem from "./todoItem"
 
 export default class Project {
 
@@ -15,9 +15,9 @@ export default class Project {
     container: HTMLElement,
     title: HTMLElement,
     description: HTMLElement,
-    addTodoButton: HTMLElement,
-    showTodoButton: HTMLElement,
-    removeButton: HTMLElement,
+    addTodoButton: HTMLButtonElement,
+    showTodoButton: HTMLButtonElement,
+    removeButton: HTMLButtonElement,
   };
 
   todoForm: {
@@ -50,8 +50,8 @@ export default class Project {
 
   setDomElements(obj: {
     container: HTMLElement, title: HTMLElement,
-    description: HTMLElement, add: HTMLElement,
-    show: HTMLElement, remove: HTMLElement
+    description: HTMLElement, add: HTMLButtonElement,
+    show: HTMLButtonElement, remove: HTMLButtonElement
   }): void {
     this.dom = {
       container: obj.container,
@@ -98,6 +98,7 @@ export default class Project {
       console.table(this.todoItemList);
       this.todoForm.dialog.close();
       this.todoForm.form.reset();
+      displayTodoItemsList(this);
     });
   }
 
@@ -107,11 +108,10 @@ export default class Project {
 
 }
 
-
 export function createProject(project: Project): {
   container: HTMLElement, title: HTMLElement,
-  description: HTMLElement, add: HTMLElement,
-  show: HTMLElement, remove: HTMLElement
+  description: HTMLElement, add: HTMLButtonElement,
+  show: HTMLButtonElement, remove: HTMLButtonElement
 } {
   const newProject = document.createElement('div');
   newProject.classList.add('project');
@@ -162,8 +162,8 @@ function removeProject(projectContainer: HTMLElement, targetProject: Project): v
   showProjects();
 }
 
-function createTodoShowButton(project: Project): HTMLElement {
-  const todoShowButton = document.createElement('button');
+function createTodoShowButton(project: Project): HTMLButtonElement {
+  const todoShowButton = document.createElement('button') as HTMLButtonElement;
   todoShowButton.textContent = 'Show todo list';
 
   todoShowButton.addEventListener('click', () => {
@@ -172,8 +172,8 @@ function createTodoShowButton(project: Project): HTMLElement {
   return todoShowButton;
 }
 
-function createRemovebutton(newProject: HTMLElement, project: Project): HTMLElement {
-  const removeButton = document.createElement('button');
+function createRemovebutton(newProject: HTMLElement, project: Project): HTMLButtonElement {
+  const removeButton = document.createElement('button') as HTMLButtonElement;
   removeButton.textContent = 'Remove project';
   removeButton.addEventListener('click', () => {
     removeProject(newProject, project);
@@ -181,8 +181,8 @@ function createRemovebutton(newProject: HTMLElement, project: Project): HTMLElem
   return removeButton;
 }
 
-function createAddTodoButton(): HTMLElement {
-  const addTodoButton = document.createElement('button');
+function createAddTodoButton(): HTMLButtonElement {
+  const addTodoButton = document.createElement('button') as HTMLButtonElement;
   addTodoButton.textContent = 'Add';
   return addTodoButton;
 }
