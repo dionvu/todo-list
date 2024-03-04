@@ -103,10 +103,18 @@ export default class Project {
   }
 
   addTodoItem(title: string, description: string): void {
-    this.todoItemList.push(new TodoItem(title, description, Priority.high));
+    this.todoItemList.push(new TodoItem(title, description, Priority.low));
   }
-
 }
+
+export function removeTodoItem(project: Project, targetItem: TodoItem) {
+  const index = project.todoItemList.findIndex((element: TodoItem) => {
+    if (project.todoItemList.indexOf(element) === project.todoItemList.indexOf(targetItem)) return true;
+  });
+  project.todoItemList.splice(index, 1);
+  console.table(project.todoItemList);
+}
+
 
 export function createProject(project: Project): {
   container: HTMLElement, title: HTMLElement,
@@ -128,9 +136,12 @@ export function createProject(project: Project): {
 
   newProject.appendChild(projectTitle);
   newProject.appendChild(projectDescription);
-  newProject.appendChild(addTodoButton);
-  newProject.appendChild(showTodoButton);
-  newProject.appendChild(removeButton);
+
+  const buttonContainer = document.createElement('div');
+  buttonContainer.appendChild(addTodoButton);
+  buttonContainer.appendChild(showTodoButton);
+  buttonContainer.appendChild(removeButton);
+  newProject.appendChild(buttonContainer);
 
   let obj = {
     container: newProject,

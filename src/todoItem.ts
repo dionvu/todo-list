@@ -1,4 +1,5 @@
 import Project from "./project";
+import { removeTodoItem } from "./project";
 
 export enum Priority {
   high = 'high',
@@ -6,7 +7,7 @@ export enum Priority {
   low = 'low',
 }
 
-export default class todoItem {
+export default class TodoItem {
   title: string;
   description: string;
   priority: Priority;
@@ -31,7 +32,7 @@ export default class todoItem {
       removeButton: obj.removeButton,
     };
 
-    this.setPriority(Priority.low);
+    this.setPriority(this.priority);
 
     this.dom.priority.addEventListener('click', this.cyclePriority.bind(this));
     console.table(this);
@@ -39,16 +40,12 @@ export default class todoItem {
 
   cyclePriority() {
     console.table(this);
-    if (this.priority === Priority.high) {
+    if (this.priority === Priority.high)
       this.setPriority(Priority.low);
-    }
-
-    else if (this.priority === Priority.medium) {
+    else if (this.priority === Priority.medium)
       this.setPriority(Priority.high);
-    }
-    else {
+    else
       this.setPriority(Priority.medium);
-    }
   }
 
   setPriority(priority: Priority) {
@@ -71,10 +68,32 @@ export default class todoItem {
   }
 }
 
+export function displayTodoItemsList(project: Project): void {
+  const todoListContainer = document.getElementById('todo-container');
+  todoListContainer.innerHTML = '';
 
+  project.todoItemList.forEach((item: TodoItem) => {
 
-export function addTodoItem(todoItemList: todoItem[], title: string, description: string): void {
-  todoItemList.push(new todoItem(title, description, Priority.low));
+    const itemContainer = document.createElement('div');
+
+    const title = document.createElement('h2');
+    title.textContent = item.title;
+
+    const description = document.createElement('p');
+    description.textContent = item.description;
+
+    const removeButton = createRemoveButton(itemContainer, item, project) as HTMLButtonElement;
+
+    const priority = document.createElement('h3');
+
+    itemContainer.appendChild(title);
+    itemContainer.appendChild(description);
+    itemContainer.appendChild(priority);
+    itemContainer.appendChild(removeButton);
+    todoListContainer.appendChild(itemContainer);
+
+    item.setDomElements({ title, description, priority, removeButton });
+  });
 }
 
 export function createTodoDialog(): {
@@ -131,38 +150,7 @@ export function createTodoDialog(): {
   return obj;
 }
 
-export function displayTodoItemsList(project: Project): void {
-  const todoListContainer = document.getElementById('todo-container');
-  todoListContainer.innerHTML = '';
-
-  project.todoItemList.forEach((item: todoItem) => {
-
-    const itemContainer = document.createElement('div');
-
-    const title = document.createElement('h2');
-    title.textContent = item.title;
-
-    const description = document.createElement('p');
-    description.textContent = item.description;
-
-    const removeButton = createRemoveButton(itemContainer, item, project) as HTMLButtonElement;
-
-    const priority = document.createElement('h3');
-    if (item.priority === Priority.low) priority.textContent = `Priority: ${Priority.low}`;
-    else if (item.priority === Priority.medium) priority.textContent = `Priority: ${Priority.medium}`;
-    else priority.textContent = `Priority: ${Priority.high}`;
-
-    itemContainer.appendChild(title);
-    itemContainer.appendChild(description);
-    itemContainer.appendChild(priority);
-    itemContainer.appendChild(removeButton);
-    todoListContainer.appendChild(itemContainer);
-
-    item.setDomElements({ title, description, priority, removeButton });
-  });
-}
-
-function createRemoveButton(container: HTMLElement, item: todoItem, project: Project): HTMLButtonElement {
+function createRemoveButton(container: HTMLElement, item: TodoItem, project: Project): HTMLButtonElement {
   const button = document.createElement('button') as HTMLButtonElement;
   button.addEventListener('click', () => {
     container.remove();
@@ -170,12 +158,4 @@ function createRemoveButton(container: HTMLElement, item: todoItem, project: Pro
   });
   button.textContent = 'remove';
   return button;
-}
-
-function removeTodoItem(project: Project, targetItem: todoItem) {
-  const index = project.todoItemList.findIndex((element: todoItem) => {
-    if (project.todoItemList.indexOf(element) === project.todoItemList.indexOf(targetItem)) return true;
-  });
-  project.todoItemList.splice(index, 1);
-  console.table(project.todoItemList);
 }

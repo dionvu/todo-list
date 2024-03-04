@@ -13,11 +13,14 @@
   <button id="add-project">Add a new project!</button>
   <dialog id="project-dialog">
     <form id="project-form">
-      <label for="project-title"></label>
-      <input id="project-title" type="name" name="title" placeholder="title" required>
-      <label for="project-description"></label>
-      <input id="project-description" type="name" name="description" value="" placeholder="description" required>
-      <button type="submit">Sumbit</button>
+      <div id="project-form-container">
+        <label for="project-title">Title</label>
+        <input id="project-title" type="name" name="title" placeholder="Build space rocket" required>
+        <label for="project-description">Description</label>
+        <textarea id="project-description" type="name" name="description" value="" placeholder="Zooooooooom" required>
+        </textarea>
+        <button id="project-submit" type="submit">Sumbit</button>
+      </div>
     </form>
   </dialog>
   <div id="todo-container">
