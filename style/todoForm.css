@@ -1,0 +1,24 @@
+#todo-dialog {
+  border-radius: 20px;
+}
+
+#todo-form>div {
+  display: flex;
+  flex-direction: column;
+  align-items: space-around;
+  padding: 30px;
+}
+
+#todo-form>div>label {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 2rem;
+}
+
+#todo-form>div>input {
+  margin-top: 10px;
+}
+
+#todo-form>div>button {
+  margin: 30px;
+}

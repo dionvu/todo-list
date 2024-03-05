@@ -75,6 +75,7 @@ export function displayTodoItemsList(project: Project): void {
   project.todoItemList.forEach((item: TodoItem) => {
 
     const itemContainer = document.createElement('div');
+    itemContainer.classList.add('todo');
 
     const title = document.createElement('h2');
     title.textContent = item.title;
@@ -105,13 +106,12 @@ export function createTodoDialog(): {
   todoDialog.id = 'todo-dialog';
 
   const todoForm = document.createElement('form') as HTMLFormElement;
-  todoForm.id = 'todo-todoForm';
+  todoForm.id = 'todo-form';
 
   const titleLabel = document.createElement('label');
   titleLabel.htmlFor = 'todo-title';
   titleLabel.textContent = 'Title';
   const titleInput = document.createElement('input') as HTMLInputElement;
-  titleInput.id = 'todo-title';
   titleInput.type = 'text';
   titleInput.name = 'title';
   titleInput.placeholder = 'Title';
@@ -121,7 +121,6 @@ export function createTodoDialog(): {
   descriptionLabel.htmlFor = 'todo-description';
   descriptionLabel.textContent = 'Description';
   const descriptionInput = document.createElement('input') as HTMLInputElement;
-  descriptionInput.id = 'todo-description';
   descriptionInput.type = 'text';
   descriptionInput.name = 'description';
   descriptionInput.placeholder = 'Description';
@@ -132,12 +131,14 @@ export function createTodoDialog(): {
   submitButton.type = 'submit';
   submitButton.textContent = 'Submit';
 
-  todoForm.appendChild(titleLabel);
-  todoForm.appendChild(titleInput);
-  todoForm.appendChild(descriptionLabel);
-  todoForm.appendChild(descriptionInput);
-  todoForm.appendChild(submitButton);
+  const container = document.createElement('div');
 
+  container.appendChild(titleLabel);
+  container.appendChild(titleInput);
+  container.appendChild(descriptionLabel);
+  container.appendChild(descriptionInput);
+  container.appendChild(submitButton);
+  todoForm.appendChild(container);
   todoDialog.appendChild(todoForm);
 
   let obj = {

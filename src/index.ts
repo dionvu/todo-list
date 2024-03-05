@@ -1,8 +1,17 @@
 import Project from './project';
-import '../style/style.css';
 import { createProject } from "./project";
 import { createTodoDialog } from "./todoItem";
 import { showProjects } from "./project";
+
+import '../style/style.css';
+import '../style/header.css';
+import '../style/todoForm.css';
+import '../style/projectForm.css';
+import '../style/project.css';
+import '../style/projectsContainer.css';
+import '../style/todoContainer.css';
+import '../style/todo.css';
+
 
 export let projectList: Project[] = [];
 
@@ -36,3 +45,6 @@ form.addEventListener('submit', (e) => {
   dialog.close();
   form.reset();
 });
+
+// addProject('title', 'description');
+showProjects();

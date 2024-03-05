@@ -1,0 +1,13 @@
+#todo-container {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  padding: 50px;
+  height: 500px;
+  min-width: 700px;
+}
+
+#todo-container>div>button {
+  font-size: 2rem;
+  margin: 5px;
+}

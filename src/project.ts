@@ -175,7 +175,7 @@ function removeProject(projectContainer: HTMLElement, targetProject: Project): v
 
 function createTodoShowButton(project: Project): HTMLButtonElement {
   const todoShowButton = document.createElement('button') as HTMLButtonElement;
-  todoShowButton.textContent = 'Show todo list';
+  todoShowButton.textContent = 'Show Todo';
 
   todoShowButton.addEventListener('click', () => {
     displayTodoItemsList(project);

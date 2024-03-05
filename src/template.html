@@ -8,22 +8,30 @@
 </head>
 
 <body>
-  <div id="projects-container">
+  <div id="projects">
+    <h1>Projects</h1>
+    <div id="projects-container">
+    </div>
   </div>
-  <button id="add-project">Add a new project!</button>
+  <div id="header">
+    <button id="add-project">Add a new project!</button>
+  </div>
   <dialog id="project-dialog">
     <form id="project-form">
       <div id="project-form-container">
         <label for="project-title">Title</label>
         <input id="project-title" type="name" name="title" placeholder="Build space rocket" required>
         <label for="project-description">Description</label>
-        <textarea id="project-description" type="name" name="description" value="" placeholder="Zooooooooom" required>
-        </textarea>
+        <textarea id="project-description" type="description" name="description" value="" placeholder="Zooooooooom"
+          required></textarea>
         <button id="project-submit" type="submit">Sumbit</button>
       </div>
     </form>
   </dialog>
-  <div id="todo-container">
+  <div id="todos">
+    <h1>Todo List</h1>
+    <div id="todo-container">
+    </div>
   </div>
 </body>
 

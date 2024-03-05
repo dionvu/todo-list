@@ -19,15 +19,16 @@ form.addEventListener('submit', (e) => {
   const title: string = (document.getElementById('project-title') as HTMLInputElement).value;
   const description: string = (document.getElementById('project-description') as HTMLInputElement).value;
 
-  projectList.push(new Project(title, description));
-
-  projectList[projectList.length - 1].setDomElements(createProject(projectList[projectList.length - 1]));
-
-  projectList[projectList.length - 1].setFormElements(createTodoDialog());
-
-  projectList[projectList.length - 1].addListeners();
+  addProject(title, description);
 
   showProjects();
   dialog.close();
   form.reset();
 });
+
+export function addProject(title: string, description: string) {
+  projectList.push(new Project(title, description));
+  projectList[projectList.length - 1].setDomElements(createProject(projectList[projectList.length - 1]));
+  projectList[projectList.length - 1].setFormElements(createTodoDialog());
+  projectList[projectList.length - 1].addListeners();
+}
