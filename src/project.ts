@@ -4,7 +4,6 @@ import { displayTodoItemsList } from "./todoItem";
 import TodoItem from "./todoItem"
 
 export default class Project {
-
   todoItemList: TodoItem[];
   data: {
     title: string;
